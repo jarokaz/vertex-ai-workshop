@@ -1,1 +1,7 @@
-# vertex-ai-workshop
+# Vertex AI Workshop
+
+
+## Environment Setup
+
+## Lab notes
+
