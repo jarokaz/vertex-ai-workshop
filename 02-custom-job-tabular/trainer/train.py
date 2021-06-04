@@ -187,7 +187,8 @@ def main(argv):
     logging.info('Starting training ...')
     model.fit(training_ds, 
               epochs=FLAGS.epochs, 
-              validation_data=validation_ds)
+              validation_data=validation_ds,
+              callbacks=callbacks)
 
        # Save trained model
     logging.info('Training completed. Saving the trained model to: {}'.format(model_dir))
