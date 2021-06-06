@@ -1,0 +1,202 @@
+{
+  "pipelineSpec": {
+    "components": {
+      "comp-customcontainertrainingjob-run": {
+        "executorLabel": "exec-customcontainertrainingjob-run",
+        "inputDefinitions": {
+          "parameters": {
+            "accelerator_count": {
+              "type": "STRING"
+            },
+            "accelerator_type": {
+              "type": "STRING"
+            },
+            "args": {
+              "type": "STRING"
+            },
+            "command": {
+              "type": "STRING"
+            },
+            "container_uri": {
+              "type": "STRING"
+            },
+            "machine_type": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            },
+            "replica_count": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "model": {
+              "artifactType": {
+                "schemaTitle": "system.Model"
+              }
+            }
+          }
+        }
+      }
+    },
+    "deploymentSpec": {
+      "executors": {
+        "exec-customcontainertrainingjob-run": {
+          "container": {
+            "args": [
+              "--init.display_name",
+              "taxi-tip-predictor-training-job",
+              "--executor_input",
+              "{{$}}",
+              "--resource_name_output_artifact_uri",
+              "{{$.outputs.artifacts['model'].uri}}",
+              "--init.project",
+              "{{$.inputs.parameters['project']}}",
+              "--init.container_uri",
+              "{{$.inputs.parameters['container_uri']}}",
+              "--method.args",
+              "{{$.inputs.parameters['args']}}",
+              "--init.command",
+              "{{$.inputs.parameters['command']}}",
+              "--method.machine_type",
+              "{{$.inputs.parameters['machine_type']}}",
+              "--method.accelerator_type",
+              "{{$.inputs.parameters['accelerator_type']}}",
+              "--method.accelerator_count",
+              "{{$.inputs.parameters['accelerator_count']}}",
+              "--method.replica_count",
+              "{{$.inputs.parameters['replica_count']}}"
+            ],
+            "command": [
+              "python3",
+              "-m",
+              "google_cloud_pipeline_components.aiplatform.remote_runner",
+              "--cls_name",
+              "CustomContainerTrainingJob",
+              "--method_name",
+              "run"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:0.1.1"
+          }
+        }
+      }
+    },
+    "pipelineInfo": {
+      "name": "taxi-tip-predictor-continuous-training"
+    },
+    "root": {
+      "dag": {
+        "tasks": {
+          "customcontainertrainingjob-run": {
+            "componentRef": {
+              "name": "comp-customcontainertrainingjob-run"
+            },
+            "inputs": {
+              "parameters": {
+                "accelerator_count": {
+                  "componentInputParameter": "accelerator_count"
+                },
+                "accelerator_type": {
+                  "componentInputParameter": "accelerator_type"
+                },
+                "args": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[\"--epochs=2\", \"--per_replica_batch_size=128\", \"--validation_table=jk-mlops-dev.chicago_taxi_training.training_split\", \"--training_table=jk-mlops-dev.chicago_taxi_training.validation_split\"]"
+                    }
+                  }
+                },
+                "command": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[\"python\", \"train.py\"]"
+                    }
+                  }
+                },
+                "container_uri": {
+                  "componentInputParameter": "training_container"
+                },
+                "machine_type": {
+                  "componentInputParameter": "machine_type"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                },
+                "replica_count": {
+                  "componentInputParameter": "replica_count"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "customcontainertrainingjob-run"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "accelerator_count": {
+            "type": "STRING"
+          },
+          "accelerator_type": {
+            "type": "STRING"
+          },
+          "epochs": {
+            "type": "INT"
+          },
+          "machine_type": {
+            "type": "STRING"
+          },
+          "model_display_name": {
+            "type": "STRING"
+          },
+          "per_replica_batch_size": {
+            "type": "INT"
+          },
+          "project": {
+            "type": "STRING"
+          },
+          "replica_count": {
+            "type": "STRING"
+          },
+          "training_container": {
+            "type": "STRING"
+          },
+          "training_table": {
+            "type": "STRING"
+          },
+          "validation_table": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    "schemaVersion": "2.0.0",
+    "sdkVersion": "kfp-1.6.3"
+  },
+  "runtimeConfig": {
+    "parameters": {
+      "accelerator_count": {
+        "stringValue": "1"
+      },
+      "accelerator_type": {
+        "stringValue": "NVIDIA_TESLA_T4"
+      },
+      "machine_type": {
+        "stringValue": "n1-standard-4"
+      },
+      "replica_count": {
+        "stringValue": "1"
+      },
+      "training_table": {
+        "stringValue": "jk-mlops-dev.chicago_taxi_training.training_split"
+      },
+      "validation_table": {
+        "stringValue": "jk-mlops-dev.chicago_taxi_training.validation_split"
+      }
+    }
+  }
+}
