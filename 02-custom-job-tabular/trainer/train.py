@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
+import json
 import os
 import tensorflow as tf
 
@@ -31,14 +32,17 @@ flags.DEFINE_integer('epochs', 3, 'Nubmer of epochs')
 flags.DEFINE_integer('units', 32, 'Number units in a hidden layer')
 flags.DEFINE_integer('per_replica_batch_size', 128, 'Per replica batch size')
 flags.DEFINE_float('dropout_ratio', 0.5, 'Dropout ratio')
-flags.DEFINE_string('training_table', None, "Training table name")
-flags.DEFINE_string('validation_table', None, "Validationa table name")
+flags.DEFINE_string('training_table', None, 'Training table name')
+flags.DEFINE_string('validation_table', None, 'Validationa table name')
+flags.DEFINE_string('testing_table', None, 'Testing table name')
 flags.mark_flag_as_required('training_table')
 flags.mark_flag_as_required('validation_table')
+flags.mark_flag_as_required('testing_table')
 
 LOCAL_MODEL_DIR = '/tmp/saved_model'
 LOCAL_TB_DIR = '/tmp/logs'
 LOCAL_CHECKPOINT_DIR = '/tmp/checkpoints'
+EVALUATION_FILE_NAME = 'evaluations.json'
 
 FEATURES = {
     "tip_bin": ("categorical", tf.int64),
@@ -168,6 +172,10 @@ def main(argv):
                                  selected_fields,
                                  batch_size=global_batch_size)
     
+    testing_ds = get_bq_dataset(FLAGS.testing_table,
+                                selected_fields,
+                                batch_size=global_batch_size)
+    
     # Prepare the model
     input_features = {key: value for key, value in FEATURES.items() if key != TARGET_FEATURE_NAME}
     logging.info('Creating the model ...')
@@ -189,10 +197,18 @@ def main(argv):
               epochs=FLAGS.epochs, 
               validation_data=validation_ds,
               callbacks=callbacks)
+    
+    results = model.evaluate(testing_ds, return_dict=True)
+    tf.io.write_file(
+        f'{model_dir}/{EVALUATION_FILE_NAME}',
+        json.dumps(results)
+    )
 
-       # Save trained model
+    # Save trained model
     logging.info('Training completed. Saving the trained model to: {}'.format(model_dir))
     model.save(model_dir)  
+    
+    
     
 if __name__ == '__main__':
     logging.set_verbosity(logging.INFO)
