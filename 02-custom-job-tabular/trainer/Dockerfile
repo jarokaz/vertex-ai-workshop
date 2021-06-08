@@ -6,5 +6,4 @@ WORKDIR /trainer
 # Copies the trainer code to the docker image.
 COPY train.py .
 
-ENTRYPOINT ["python"]
-CMD ["-c", "print('Hello')"]
+ENTRYPOINT ["python", "train.py"]
