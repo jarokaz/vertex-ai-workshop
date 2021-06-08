@@ -1,0 +1,162 @@
+{
+  "pipelineSpec": {
+    "components": {
+      "comp-customcontainertrainingjob-run": {
+        "executorLabel": "exec-customcontainertrainingjob-run",
+        "inputDefinitions": {
+          "parameters": {
+            "args": {
+              "type": "STRING"
+            },
+            "command": {
+              "type": "STRING"
+            },
+            "location": {
+              "type": "STRING"
+            },
+            "project": {
+              "type": "STRING"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "artifacts": {
+            "model": {
+              "artifactType": {
+                "schemaTitle": "system.Model"
+              }
+            }
+          }
+        }
+      }
+    },
+    "deploymentSpec": {
+      "executors": {
+        "exec-customcontainertrainingjob-run": {
+          "container": {
+            "args": [
+              "--init.display_name",
+              "Taxi tip predictor",
+              "--init.container_uri",
+              "gcr.io/jk-mlops-dev/taxi_classifier_trainer",
+              "--init.staging_bucket",
+              "gs://jk-vertex-workshop-bucket/test",
+              "--init.model_serving_container_image_uri",
+              "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-4:latest",
+              "--method.model_display_name",
+              "Taxi tip predictor",
+              "--method.replica_count",
+              "1",
+              "--method.machine_type",
+              "n1-standard-4",
+              "--method.accelerator_type",
+              "NVIDIA_TESLA_T4",
+              "--method.accelerator_count",
+              "1",
+              "--executor_input",
+              "{{$}}",
+              "--resource_name_output_artifact_uri",
+              "{{$.outputs.artifacts['model'].uri}}",
+              "--init.project",
+              "{{$.inputs.parameters['project']}}",
+              "--init.location",
+              "{{$.inputs.parameters['location']}}",
+              "--init.command",
+              "{{$.inputs.parameters['command']}}",
+              "--method.args",
+              "{{$.inputs.parameters['args']}}"
+            ],
+            "command": [
+              "python3",
+              "-m",
+              "google_cloud_pipeline_components.aiplatform.remote_runner",
+              "--cls_name",
+              "CustomContainerTrainingJob",
+              "--method_name",
+              "run"
+            ],
+            "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:0.1.1"
+          }
+        }
+      }
+    },
+    "pipelineInfo": {
+      "name": "test-pipeline"
+    },
+    "root": {
+      "dag": {
+        "tasks": {
+          "customcontainertrainingjob-run": {
+            "componentRef": {
+              "name": "comp-customcontainertrainingjob-run"
+            },
+            "inputs": {
+              "parameters": {
+                "args": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"{{$.inputs.parameters['pipelineparam--training_table']}}\", \"--validation_table\", \"{{$.inputs.parameters['pipelineparam--validation_table']}}\"]"
+                    }
+                  }
+                },
+                "command": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "[\"python\", \"train.py\"]"
+                    }
+                  }
+                },
+                "location": {
+                  "componentInputParameter": "location"
+                },
+                "pipelineparam--epochs": {
+                  "componentInputParameter": "epochs"
+                },
+                "pipelineparam--per_replica_batch_size": {
+                  "componentInputParameter": "per_replica_batch_size"
+                },
+                "pipelineparam--training_table": {
+                  "componentInputParameter": "training_table"
+                },
+                "pipelineparam--validation_table": {
+                  "componentInputParameter": "validation_table"
+                },
+                "project": {
+                  "componentInputParameter": "project"
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "customcontainertrainingjob-run"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "epochs": {
+            "type": "INT"
+          },
+          "location": {
+            "type": "STRING"
+          },
+          "per_replica_batch_size": {
+            "type": "INT"
+          },
+          "project": {
+            "type": "STRING"
+          },
+          "training_table": {
+            "type": "STRING"
+          },
+          "validation_table": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    "schemaVersion": "2.0.0",
+    "sdkVersion": "kfp-1.6.3"
+  },
+  "runtimeConfig": {}
+}
