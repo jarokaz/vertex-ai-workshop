@@ -13,7 +13,7 @@
                   "args": {
                     "runtimeValue": {
                       "constantValue": {
-                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-mlops-dev.chicago_taxi_ml.training\", \"--validation_table\", \"jk-mlops-dev.chicago_taxi_ml.validation\"]"
+                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-mlops-dev.chicago_taxi_ml.training\", \"--validation_table\", \"jk-mlops-dev.chicago_taxi_ml.validation\", \"--schema_file\", \"gs://jk-vertex-workshop-bucket/schema/schema.pbtxt\"]"
                       }
                     }
                   },
