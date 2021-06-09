@@ -13,7 +13,7 @@
                   "args": {
                     "runtimeValue": {
                       "constantValue": {
-                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-mlops-dev.chicago-taxi-ml.training\", \"--validation_table\", \"jk-mlops-dev.chicago-taxi-ml.validation\"]"
+                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-mlops-dev.chicago_taxi_ml.training\", \"--validation_table\", \"jk-mlops-dev.chicago_taxi_ml.validation\"]"
                       }
                     }
                   },
@@ -325,6 +325,8 @@
               "us-central1",
               "--init.container_uri",
               "gcr.io/jk-mlops-dev/taxi_classifier_trainer",
+              "--init.model_serving_container_image_uri",
+              "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-4:latest",
               "--method.replica_count",
               "1",
               "--method.accelerator_type",
@@ -624,7 +626,7 @@
                 "dataset_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "chicago-taxi-ml"
+                      "stringValue": "chicago_taxi_ml"
                     }
                   }
                 },
