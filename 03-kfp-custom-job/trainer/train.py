@@ -95,7 +95,7 @@ def get_bq_dataset(table_name, features, target_feature, batch_size=32):
         target = trimmed_dict.pop(target_feature)
         return (trimmed_dict, target)
     
-    selected_features = {key: {'output_type': value[1]} 
+    selected_fields = {key: {'output_type': value[1]} 
                          for key, value in features.items()}
     project_id, dataset_id, table_id = table_name.split('.')
     client = tfio_bq.BigQueryClient()
@@ -187,11 +187,11 @@ def main(argv):
     
     # Prepare datasets
     validation_ds = get_bq_dataset(FLAGS.validation_table, 
-                                   selected_fields,
+                                   features,
                                    target_feature,
                                    batch_size=global_batch_size)
     training_ds = get_bq_dataset(FLAGS.training_table,
-                                 selected_fields,
+                                 features,
                                  target_feature,
                                  batch_size=global_batch_size)
     
