@@ -27,7 +27,6 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 from tensorflow_io import bigquery as tfio_bq
 
-
 FLAGS = flags.FLAGS
 flags.DEFINE_integer('epochs', 3, 'Nubmer of epochs')
 flags.DEFINE_integer('units', 32, 'Number units in a hidden layer')
@@ -47,7 +46,7 @@ TARGET_TAG = 'target'
 
 
 def schema_to_features(schema):
-    """Converts schema_pb2 protobuf to feature dictionary."""
+    """Converts a schema_pb2 protobuf to feature dictionary."""
     
     features = {}
     for feature in schema.feature:
@@ -63,8 +62,9 @@ def schema_to_features(schema):
     
     return features
 
+
 def get_target_feature(schema):
-    """Returns the name of the target feature from schema."""
+    """Returns the name of the target feature in schema."""
     
     target_feature = None
     for feature in schema.feature:
@@ -84,8 +84,8 @@ def set_job_dirs():
     return model_dir, tb_dir, checkpoint_dir
 
 
-
 def get_bq_dataset(table_name, features, target_feature, batch_size=32):
+    """Creates a tf.data dataset for direct access to BQ table."""
     
     def _transform_row(row_dict):
         trimmed_dict = {column:
@@ -96,7 +96,7 @@ def get_bq_dataset(table_name, features, target_feature, batch_size=32):
         return (trimmed_dict, target)
     
     selected_fields = {key: {'output_type': value[1]} 
-                         for key, value in features.items()}
+                       for key, value in features.items()}
     project_id, dataset_id, table_id = table_name.split('.')
     client = tfio_bq.BigQueryClient()
     parent = f'projects/{project_id}'
@@ -177,13 +177,13 @@ def main(argv):
     global_batch_size = (strategy.num_replicas_in_sync *
                          FLAGS.per_replica_batch_size)
     
+    # Extract features from schema_pb2
     schema = tfdv.load_schema_text(FLAGS.schema_file)
-    
     features = schema_to_features(schema)
     target_feature = get_target_feature(schema)
 
     if not target_feature:
-        raise RuntimeError('Schema does not have target feature annotation')
+        raise RuntimeError('Schema does not have a target feature')
     
     # Prepare datasets
     validation_ds = get_bq_dataset(FLAGS.validation_table, 
