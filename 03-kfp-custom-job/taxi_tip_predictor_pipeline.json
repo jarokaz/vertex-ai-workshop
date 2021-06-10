@@ -324,7 +324,7 @@
               "--init.location",
               "us-central1",
               "--init.container_uri",
-              "gcr.io/jk-mlops-dev/taxi_classifier_trainer",
+              "gcr.io/jk-mlops-dev/taxi_classifier_trainer_v2",
               "--init.model_serving_container_image_uri",
               "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-4:latest",
               "--method.replica_count",
@@ -517,7 +517,7 @@
       }
     },
     "pipelineInfo": {
-      "name": "taxi-tip-continuous-training"
+      "name": "taxi-tip-classifier-continuous-training-pipeline"
     },
     "root": {
       "dag": {
