@@ -95,7 +95,8 @@ variable "training_sa_roles" {
   description = "The roles to assign to the Vertex Training service account"
   default = [
     "storage.admin",
-    "aiplatform.user" 
+    "aiplatform.user",
+    "bigquery.admin"
     ] 
 }
 
