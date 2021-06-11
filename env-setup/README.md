@@ -11,7 +11,7 @@ You can customize your configuration using the following variables:
 
 |Variable|Required|Default|Description|
 |--------|--------|-------|-----------|
-|name_prefix|Yes||Prefix added to the names of provisioned resources|
+|name_prefix|Yes||Prefix added to the names of provisioned resources. **The prefix should start with a letter and include letters and digits only**.|
 |project_id|Yes||GCP project ID|
 |network_name|No|default|Name of the network for the Notebook instance. The network must already exist.|
 |subnet_name|No|default|Name of the subnet for the Notebook instance. The subnet must already exist.|
