@@ -90,3 +90,20 @@ variable "force_destroy" {
     type        = bool
     default     = false
 }
+
+variable "training_sa_roles" {
+  description = "The roles to assign to the Vertex Training service account"
+  default = [
+    "storage.admin",
+    "aiplatform.user" 
+    ] 
+}
+
+variable "pipelines_sa_roles" {
+  description = "The roles to assign to the Vertex Pipelines service account"
+  default = [    
+    "storage.objectAdmin", 
+    "bigquery.admin", 
+    "aiplatform.user"
+  ]
+}

@@ -20,7 +20,7 @@ terraform {
 
 #  backend "gcs" {
 #    bucket  = "jk-terraform-state"
-#    prefix  = "vertex-ai-v-env"
+#    prefix  = "vertex-ai-env"
 #  }
 }
 
