@@ -33,5 +33,6 @@ module "project-services" {
     "aiplatform.googleapis.com",
     "dataflow.googleapis.com",
     "bigquery.googleapis.com",
+    "cloudbuild.googleapis.com",
   ]
 }
