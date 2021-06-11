@@ -33,7 +33,7 @@ To provision the environment:
 
 - Download the installation scripts
 ```
-SRC_REPO=https://github.com/jarokaz/vertex-ai-samples
+SRC_REPO=https://github.com/jarokaz/vertex-ai-workshop
 LOCAL_DIR=vertex-ai-env-setup
 kpt pkg get $SRC_REPO/env-setup@main $LOCAL_DIR
 cd $LOCAL_DIR/terraform
