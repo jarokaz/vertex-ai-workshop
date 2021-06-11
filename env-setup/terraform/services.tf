@@ -23,6 +23,7 @@ module "project-services" {
     "compute.googleapis.com",
     "iam.googleapis.com",
     "container.googleapis.com",
+    "artifactregistry.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "cloudtrace.googleapis.com",
     "iamcredentials.googleapis.com",

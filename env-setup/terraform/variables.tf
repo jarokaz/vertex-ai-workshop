@@ -19,8 +19,8 @@ variable "project_id" {
     type        = string
 }
 
-variable "gcs_region" {
-    description = "The region for the GCS bucket"
+variable "region" {
+    description = "The region for the GCS bucket and Artifact Registry"
     type        = string
     default     = null
 }

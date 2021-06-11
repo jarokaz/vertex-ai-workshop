@@ -1,4 +1,3 @@
-
 # Copyright 2021 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +13,11 @@
 # limitations under the License.
 
 
-resource "google_storage_bucket" "artifact_repo" {
-    project       = module.project-services.project_id
-    name          = "${var.name_prefix}-bucket"
-    location      = local.region
-    storage_class = local.bucket_type
-    force_destroy = var.force_destroy
+resource "google_artifact_registry_repository" "docker-repo" {
+    provider = google-beta
+    project = module.project-services.project_id
+    location = local.region
+    repository_id = "${var.name_prefix}-registry"
+    description = "Docker repository"
+    format = "DOCKER"
 }
