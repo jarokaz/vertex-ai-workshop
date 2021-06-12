@@ -1,7 +1,7 @@
 project_id = "jk-vertex-workshop"
 subnet_region = "us-central1"
 zone = "us-central1-a"
-name_prefix = "jk-vw"
+name_prefix = "jkvw"
 machine_type = "n1-standard-8"
 #gpu_type = "NVIDIA_TESLA_T4"
 #gpu_count = 1
