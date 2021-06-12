@@ -26,5 +26,12 @@ gcloud beta ai tensorboards create --display-name $DISPLAY_NAME \
 
 Save the tensorboard name returned by the command
 
+#### List Tensorboards
+
+```
+gcloud beta ai tensorboards list \
+  --project $PROJECT --region $REGION
+```
+
 ## Lab notes
 

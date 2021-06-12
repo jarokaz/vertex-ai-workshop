@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
+import hypertune
 import json
 import os
 import tensorflow as tf
@@ -152,6 +153,18 @@ def create_model(dataset, input_features, units, dropout_ratio):
     return model
 
 
+class HypertuneCallback(tf.keras.callbacks.Callback):
+    def __init__(self):
+        self.hpt = hypertune.HyperTune()
+        
+    def on_epoch_end(self, epoch, logs=None):
+        self.hpt.report_hyperparameter_tuning_metric(
+            hyperparameter_metric_tag='accuracy',
+            metric_value=logs['val_accuracy'],
+            global_step=epoch
+        )
+        
+
 def main(argv):
     del argv
     
@@ -185,6 +198,7 @@ def main(argv):
     callbacks = [tf.keras.callbacks.experimental.BackupAndRestore(backup_dir=checkpoint_dir)]
     callbacks.append(tf.keras.callbacks.TensorBoard(
             log_dir=tb_dir, update_freq='batch'))
+    callbacks.append(HypertuneCallback())
     
     logging.info('Starting training ...')
     model.fit(training_ds, 
