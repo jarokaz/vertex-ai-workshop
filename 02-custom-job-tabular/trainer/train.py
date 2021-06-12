@@ -27,6 +27,8 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 from tensorflow_io import bigquery as tfio_bq
 
+from tensorboard.plugins.hparams import api as tb_hp
+
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer('epochs', 3, 'Nubmer of epochs')
@@ -187,8 +189,14 @@ def main(argv):
     input_features = {key: value for key, value in FEATURES.items() if key != TARGET_FEATURE_NAME}
     logging.info('Creating the model ...')
     
+    # Set hyperparameter dictionary for Tensorboard
+    hparams = {
+        'units': FLAGS.units,
+        'dropout': FLAGS.dropout_ratio
+    }
+    
     with strategy.scope():
-        model = create_model(training_ds, input_features, FLAGS.units, FLAGS.dropout_ratio)
+        model = create_model(training_ds, input_features, hparams['units'], hparams['dropout'])
         model.compile(optimizer='adam',
                   loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                   metrics=['accuracy'])
@@ -196,8 +204,10 @@ def main(argv):
     # Configure Keras callbacks
     model_dir, tb_dir, checkpoint_dir = set_job_dirs()
     callbacks = [tf.keras.callbacks.experimental.BackupAndRestore(backup_dir=checkpoint_dir)]
-    callbacks.append(tf.keras.callbacks.TensorBoard(
-            log_dir=tb_dir, update_freq='batch'))
+    callbacks.append(tf.keras.callbacks.TensorBoard(log_dir=tb_dir, 
+                                                    update_freq='batch'))
+    callbacks.append(tb_hp.KerasCallback(writer=tb_dir, 
+                                         hparams=hparams))
     callbacks.append(HypertuneCallback())
     
     logging.info('Starting training ...')
