@@ -57,8 +57,8 @@ FEATURES = {
     "trip_miles": ("numeric", tf.double),
 }
 
-TARGET_FEATURE_NAME = "tip_bin"
-TARGET_LABELS = ["tip<20%", "tip>=20%"]
+TARGET_FEATURE_NAME = 'tip_bin'
+HPTUNE_METRIC = 'val_accuracy'
 
 
 def set_job_dirs():
@@ -159,8 +159,8 @@ class HypertuneCallback(tf.keras.callbacks.Callback):
         
     def on_epoch_end(self, epoch, logs=None):
         self.hpt.report_hyperparameter_tuning_metric(
-            hyperparameter_metric_tag='accuracy',
-            metric_value=logs['val_accuracy'],
+            hyperparameter_metric_tag=HPTUNE_METRIC,
+            metric_value=logs[HPTUNE_METRIC],
             global_step=epoch
         )
         
