@@ -16,6 +16,7 @@
 import hypertune
 import json
 import os
+import re
 import tensorflow as tf
 
 from absl import app
@@ -45,6 +46,7 @@ LOCAL_TB_DIR = '/tmp/logs'
 LOCAL_CHECKPOINT_DIR = '/tmp/checkpoints'
 EVALUATION_FILE_NAME = 'evaluations.json'
 
+# Define features
 FEATURES = {
     "tip_bin": ("categorical", tf.int64),
     "trip_month": ("categorical", tf.int64),
@@ -58,10 +60,23 @@ FEATURES = {
     "trip_seconds": ("numeric", tf.int64),
     "trip_miles": ("numeric", tf.double),
 }
-
 TARGET_FEATURE_NAME = 'tip_bin'
-HPTUNE_METRIC = 'val_accuracy'
 
+ # Set hparams for Tensorboard and Vertex hp tuner
+HP_DROPOUT = tb_hp.HParam("dropout")
+HP_UNITS = tb_hp.HParam("units")
+HPARAMS = [
+    HP_UNITS,
+    HP_DROPOUT,
+]
+METRICS = [
+    tb_hp.Metric(
+        "epoch_accuracy",
+        group="validation",
+        display_name="epoch accuracy"),
+]
+HPTUNE_METRIC = 'val_accuracy'
+    
 
 def set_job_dirs():
     """Sets job directories based on env variables set by Vertex AI."""
@@ -70,7 +85,15 @@ def set_job_dirs():
     tb_dir = os.getenv('AIP_TENSORBOARD_LOG_DIR', LOCAL_TB_DIR)
     checkpoint_dir = os.getenv('AIP_CHECKPOINT_DIR', LOCAL_CHECKPOINT_DIR)
     
-    return model_dir, tb_dir, checkpoint_dir
+    path = os.path.normpath(tb_dir)
+    trial_id = re.match('^[0-9]+$', path.split(os.sep)[-2])
+    if not trial_id:
+        trial_id = '0'
+    else:
+        trial_id = trial_id[0]
+    logging.info(trial_id)
+    
+    return model_dir, tb_dir, checkpoint_dir, trial_id
 
 
 def get_bq_dataset(table_name, selected_fields, target_feature='tip_bin', batch_size=32):
@@ -155,16 +178,23 @@ def create_model(dataset, input_features, units, dropout_ratio):
     return model
 
 
-class HypertuneCallback(tf.keras.callbacks.Callback):
-    def __init__(self):
+class HptuneCallback(tf.keras.callbacks.Callback):
+    """
+    A custom Keras callback class that reports a metric to hypertuner
+    at the end of each epoch.
+    """
+    
+    def __init__(self, metric_tag, metric_value):
+        super(HptuneCallback, self).__init__()
+        self.metric_tag = metric_tag
+        self.metric_value = metric_value
         self.hpt = hypertune.HyperTune()
         
     def on_epoch_end(self, epoch, logs=None):
         self.hpt.report_hyperparameter_tuning_metric(
-            hyperparameter_metric_tag=HPTUNE_METRIC,
-            metric_value=logs[HPTUNE_METRIC],
-            global_step=epoch
-        )
+            hyperparameter_metric_tag=self.metric_tag,
+            metric_value=logs[self.metric_value],
+            global_step=epoch)
         
 
 def main(argv):
@@ -185,31 +215,36 @@ def main(argv):
                                  selected_fields,
                                  batch_size=global_batch_size)
     
-    # Prepare the model
-    input_features = {key: value for key, value in FEATURES.items() if key != TARGET_FEATURE_NAME}
-    logging.info('Creating the model ...')
-    
-    # Set hyperparameter dictionary for Tensorboard
+    # Configure Tensorboard hparams
+    model_dir, tb_dir, checkpoint_dir, trial_id = set_job_dirs()
+    with tf.summary.create_file_writer(tb_dir).as_default():
+        tb_hp.hparams_config(hparams=HPARAMS, metrics=METRICS)
+        
     hparams = {
-        'units': FLAGS.units,
-        'dropout': FLAGS.dropout_ratio
+        HP_UNITS: FLAGS.units,
+        HP_DROPOUT: FLAGS.dropout_ratio
     }
     
+    # Create the model
+    input_features = {key: value for key, value in FEATURES.items() if key != TARGET_FEATURE_NAME}
+    logging.info('Creating the model ...')
     with strategy.scope():
-        model = create_model(training_ds, input_features, hparams['units'], hparams['dropout'])
+        model = create_model(training_ds, input_features, hparams[HP_UNITS], hparams[HP_DROPOUT])
         model.compile(optimizer='adam',
                   loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
                   metrics=['accuracy'])
     
-    # Configure Keras callbacks
-    model_dir, tb_dir, checkpoint_dir = set_job_dirs()
+    # Configure training regimen
     callbacks = [tf.keras.callbacks.experimental.BackupAndRestore(backup_dir=checkpoint_dir)]
     callbacks.append(tf.keras.callbacks.TensorBoard(log_dir=tb_dir, 
-                                                    update_freq='batch'))
+                                                    update_freq='batch',
+                                                    profile_batch=0))
     callbacks.append(tb_hp.KerasCallback(writer=tb_dir, 
-                                         hparams=hparams))
-    callbacks.append(HypertuneCallback())
+                                         hparams=hparams,
+                                         trial_id=trial_id))
+    callbacks.append(HptuneCallback(HPTUNE_METRIC, HPTUNE_METRIC))
     
+    # Start training
     logging.info('Starting training ...')
     model.fit(training_ds, 
               epochs=FLAGS.epochs, 
