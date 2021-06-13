@@ -13,7 +13,7 @@
                   "args": {
                     "runtimeValue": {
                       "constantValue": {
-                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-mlops-dev.chicago_taxi_ml.training\", \"--validation_table\", \"jk-mlops-dev.chicago_taxi_ml.validation\", \"--schema_file\", \"gs://jk-vertex-workshop-bucket/schema/schema.pbtxt\"]"
+                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.training\", \"--validation_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.validation\", \"--schema_file\", \"gs://jkvw-bucket/schema//schema.pbtxt\"]"
                       }
                     }
                   },
@@ -30,7 +30,7 @@
                     "componentInputParameter": "pipelineparam--per_replica_batch_size"
                   },
                   "staging_bucket": {
-                    "componentInputParameter": "pipelineparam--staging_bucket"
+                    "componentInputParameter": "pipelineparam--staging_location"
                   }
                 }
               },
@@ -102,7 +102,7 @@
             "pipelineparam--per_replica_batch_size": {
               "type": "INT"
             },
-            "pipelineparam--staging_bucket": {
+            "pipelineparam--staging_location": {
               "type": "STRING"
             },
             "pipelineparam--validate-stats-op-anomalies_detected": {
@@ -320,18 +320,14 @@
           "container": {
             "args": [
               "--init.project",
-              "jk-mlops-dev",
+              "jk-vertex-workshop",
               "--init.location",
               "us-central1",
               "--init.container_uri",
-              "gcr.io/jk-mlops-dev/taxi_classifier_trainer_v2",
+              "gcr.io/jk-vertex-workshop/taxi_classifier_trainer_v2",
               "--init.model_serving_container_image_uri",
               "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-4:latest",
               "--method.replica_count",
-              "1",
-              "--method.accelerator_type",
-              "NVIDIA_TESLA_T4",
-              "--method.accelerator_count",
               "1",
               "--executor_input",
               "{{$}}",
@@ -362,7 +358,7 @@
           "container": {
             "args": [
               "--method.project",
-              "jk-mlops-dev",
+              "jk-vertex-workshop",
               "--executor_input",
               "{{$}}",
               "--resource_name_output_artifact_uri",
@@ -414,7 +410,7 @@
           "importer": {
             "artifactUri": {
               "constantValue": {
-                "stringValue": "gs://jk-vertex-workshop-bucket/schema/schema.pbtxt"
+                "stringValue": "gs://jkvw-bucket/schema//schema.pbtxt"
               }
             },
             "typeSchema": {
@@ -461,7 +457,7 @@
           "container": {
             "args": [
               "--init.project",
-              "jk-mlops-dev",
+              "jk-vertex-workshop",
               "--method.machine_type",
               "n1-standard-4",
               "--executor_input",
@@ -517,7 +513,7 @@
       }
     },
     "pipelineInfo": {
-      "name": "taxi-tip-classifier-continuous-training-pipeline"
+      "name": "jkvw-continuous-training-pipeline"
     },
     "root": {
       "dag": {
@@ -540,8 +536,8 @@
                 "pipelineparam--per_replica_batch_size": {
                   "componentInputParameter": "per_replica_batch_size"
                 },
-                "pipelineparam--staging_bucket": {
-                  "componentInputParameter": "staging_bucket"
+                "pipelineparam--staging_location": {
+                  "componentInputParameter": "staging_location"
                 },
                 "pipelineparam--validate-stats-op-anomalies_detected": {
                   "taskOutputParameter": {
@@ -578,7 +574,7 @@
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-mlops-dev"
+                      "stringValue": "jk-vertex-workshop"
                     }
                   }
                 },
@@ -600,7 +596,7 @@
                 "uri": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "gs://jk-vertex-workshop-bucket/schema/schema.pbtxt"
+                      "stringValue": "gs://jkvw-bucket/schema//schema.pbtxt"
                     }
                   }
                 }
@@ -626,14 +622,14 @@
                 "dataset_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "chicago_taxi_ml"
+                      "stringValue": "jkvw_dataset_pipeline"
                     }
                   }
                 },
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-mlops-dev"
+                      "stringValue": "jk-vertex-workshop"
                     }
                   }
                 },
@@ -697,7 +693,7 @@
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-mlops-dev"
+                      "stringValue": "jk-vertex-workshop"
                     }
                   }
                 }
@@ -726,7 +722,7 @@
           "sample_size": {
             "type": "INT"
           },
-          "staging_bucket": {
+          "staging_location": {
             "type": "STRING"
           },
           "year": {
