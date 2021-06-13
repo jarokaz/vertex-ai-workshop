@@ -34,5 +34,6 @@ module "project-services" {
     "dataflow.googleapis.com",
     "bigquery.googleapis.com",
     "cloudbuild.googleapis.com",
+    "bigquerydatatransfer.googleapis.com",
   ]
 }
