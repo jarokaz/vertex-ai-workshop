@@ -13,7 +13,7 @@
                   "args": {
                     "runtimeValue": {
                       "constantValue": {
-                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.training\", \"--validation_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.validation\", \"--schema_file\", \"gs://jkvw-bucket/schema//schema.pbtxt\"]"
+                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.training\", \"--validation_table\", \"jk-vertex-workshop.jkvw_dataset_pipeline.validation\", \"--schema_file\", \"gs://jkvw-bucket/schema/schema.pbtxt\"]"
                       }
                     }
                   },
@@ -410,7 +410,7 @@
           "importer": {
             "artifactUri": {
               "constantValue": {
-                "stringValue": "gs://jkvw-bucket/schema//schema.pbtxt"
+                "stringValue": "gs://jkvw-bucket/schema/schema.pbtxt"
               }
             },
             "typeSchema": {
@@ -596,7 +596,7 @@
                 "uri": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "gs://jkvw-bucket/schema//schema.pbtxt"
+                      "stringValue": "gs://jkvw-bucket/schema/schema.pbtxt"
                     }
                   }
                 }
