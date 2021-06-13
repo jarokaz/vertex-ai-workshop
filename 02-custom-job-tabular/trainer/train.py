@@ -79,7 +79,8 @@ HPTUNE_METRIC = 'val_accuracy'
     
 
 def set_job_dirs():
-    """Sets job directories based on env variables set by Vertex AI."""
+    """Sets job directories and hyperparameter tuning trial id
+    based on env variables set by Vertex AI."""
     
     model_dir = os.getenv('AIP_MODEL_DIR', LOCAL_MODEL_DIR)
     tb_dir = os.getenv('AIP_TENSORBOARD_LOG_DIR', LOCAL_TB_DIR)
