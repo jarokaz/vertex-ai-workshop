@@ -61,6 +61,8 @@ Each participant should have their own regional GCS bucket. The bucket should be
 
 `gs://{PREFIX}-bucket`
 
+The goal of the prefix is too avoid conflicts between participants as such it should be unique for each participant. **The prefix should start with a letter and include letters and digits only**
+
 The workshop notebooks assume this naming convention.
 
 
