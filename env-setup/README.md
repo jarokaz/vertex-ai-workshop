@@ -16,7 +16,7 @@ You can customize your configuration using the following variables:
 |project_id|Yes||GCP project ID|
 |network_name|No|default|Name of the network for the Notebook instance. The network must already exist.|
 |subnet_name|No|default|Name of the subnet for the Notebook instance. The subnet must already exist.|
-|subnet_region|No||Region where the subnet was created.|
+|subnet_region|Yes|us-central1|Region where the subnet was created.|
 |zone|Yes||GCP zone for the Notebook instance. The zone must be in the region defined in the `subnet_region` variable|
 |machine_type|No|n1-standard-4|Machine type of the  Notebook instance|
 |boot_disk_size|No|200GB|Size of the Notebook instance's boot disk|

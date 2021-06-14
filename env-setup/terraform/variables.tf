@@ -55,6 +55,7 @@ variable "subnet_name" {
 variable "subnet_region" {
     description = "The region for the Notebook subnet"
     type        = string
+    default     = "us-central1"
 }
 
 variable "boot_disk_size" {
