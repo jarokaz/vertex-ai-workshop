@@ -108,3 +108,13 @@ variable "pipelines_sa_roles" {
     "aiplatform.user"
   ]
 }
+
+variable "training_sa_name" {
+    description = "Vertex training service account name."
+    default = "training_sa"
+}
+
+variable "pipelines_sa_name" {
+    description = "Vertex pipelines service account name."
+    default = "pipelines_sa"
+}
