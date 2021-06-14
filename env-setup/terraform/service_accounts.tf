@@ -15,7 +15,7 @@
 # Create Vertex Training service account
 resource "google_service_account" "training_sa" {
     project       = module.project-services.project_id
-    account_id   = var.training_sa
+    account_id   = var.training_sa_name
     display_name = "Vertex Training service account"
 }
 
@@ -30,7 +30,7 @@ resource "google_project_iam_member" "training_sa_role_bindings" {
 # Create Vertex Pipelines service account
 resource "google_service_account" "pipelines_sa" {
     project       = module.project-services.project_id
-    account_id   = var.pipelines_sa
+    account_id   = var.pipelines_sa_name
     display_name = "Vertex Pipelines account name"
 }
 
