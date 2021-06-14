@@ -82,7 +82,7 @@ variable "gpu_count" {
 variable "install_gpu_driver" {
     description = "Whether to install GPU driver"
     type        = bool
-    default     = true
+    default     = false
 }
 
 variable "force_destroy" {
