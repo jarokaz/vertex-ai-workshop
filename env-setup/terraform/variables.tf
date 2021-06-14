@@ -112,10 +112,10 @@ variable "pipelines_sa_roles" {
 
 variable "training_sa_name" {
     description = "Vertex training service account name."
-    default = "training_sa"
+    default = "training-sa"
 }
 
 variable "pipelines_sa_name" {
     description = "Vertex pipelines service account name."
-    default = "pipelines_sa"
+    default = "pipelines-sa"
 }
