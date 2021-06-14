@@ -65,6 +65,7 @@ variable "boot_disk_size" {
 variable "image_family" {
     description = "A Deep Learning image family for the Notebook instance"
     type        = string
+    default.    = "tf-2-4-cpu"
 }
 
 variable "gpu_type" {
