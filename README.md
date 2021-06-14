@@ -70,7 +70,7 @@ Each participant should have any instance of Vertex AI Notebook. The instances c
 
 The instance should be configured as follows:
 
-- Machine type: **n1-standard-8**
+- Machine type: **n1-standard-4**
 - Optionally a T4 GPU can be added to the machine configuration if participants want to experiment with GPUs
 - Image family: **tf-2-4-cpu** or **tf-2-4-cu110** (if using GPUs)
 - Configured with the default compute engine service account
