@@ -13,7 +13,7 @@
                   "args": {
                     "runtimeValue": {
                       "constantValue": {
-                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-test-1002.jktest2_dataset_pipeline.training\", \"--validation_table\", \"jk-test-1002.jktest2_dataset_pipeline.validation\", \"--schema_file\", \"gs://jktest2-bucket/schema/schema.pbtxt\"]"
+                        "stringValue": "[\"--epochs\", \"{{$.inputs.parameters['pipelineparam--epochs']}}\", \"--per_replica_batch_size\", \"{{$.inputs.parameters['pipelineparam--per_replica_batch_size']}}\", \"--training_table\", \"jk-vertexai-ws.jk_dataset_pipeline.training\", \"--validation_table\", \"jk-vertexai-ws.jk_dataset_pipeline.validation\", \"--schema_file\", \"gs://jk-bucket/schema/schema.pbtxt\"]"
                       }
                     }
                   },
@@ -320,11 +320,11 @@
           "container": {
             "args": [
               "--init.project",
-              "jk-test-1002",
+              "jk-vertexai-ws",
               "--init.location",
               "us-central1",
               "--init.container_uri",
-              "gcr.io/jk-test-1002/taxi_classifier_trainer_v2",
+              "gcr.io/jk-vertexai-ws/taxi_classifier_trainer_v2",
               "--init.model_serving_container_image_uri",
               "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-4:latest",
               "--method.replica_count",
@@ -358,7 +358,7 @@
           "container": {
             "args": [
               "--method.project",
-              "jk-test-1002",
+              "jk-vertexai-ws",
               "--executor_input",
               "{{$}}",
               "--resource_name_output_artifact_uri",
@@ -410,7 +410,7 @@
           "importer": {
             "artifactUri": {
               "constantValue": {
-                "stringValue": "gs://jktest2-bucket/schema/schema.pbtxt"
+                "stringValue": "gs://jk-bucket/schema/schema.pbtxt"
               }
             },
             "typeSchema": {
@@ -457,7 +457,7 @@
           "container": {
             "args": [
               "--init.project",
-              "jk-test-1002",
+              "jk-vertexai-ws",
               "--method.machine_type",
               "n1-standard-4",
               "--executor_input",
@@ -513,7 +513,7 @@
       }
     },
     "pipelineInfo": {
-      "name": "jktest2-continuous-training-pipeline"
+      "name": "jk-continuous-training-pipeline"
     },
     "root": {
       "dag": {
@@ -574,7 +574,7 @@
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-test-1002"
+                      "stringValue": "jk-vertexai-ws"
                     }
                   }
                 },
@@ -596,7 +596,7 @@
                 "uri": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "gs://jktest2-bucket/schema/schema.pbtxt"
+                      "stringValue": "gs://jk-bucket/schema/schema.pbtxt"
                     }
                   }
                 }
@@ -622,14 +622,14 @@
                 "dataset_name": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jktest2_dataset_pipeline"
+                      "stringValue": "jk_dataset_pipeline"
                     }
                   }
                 },
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-test-1002"
+                      "stringValue": "jk-vertexai-ws"
                     }
                   }
                 },
@@ -693,7 +693,7 @@
                 "project": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "jk-test-1002"
+                      "stringValue": "jk-vertexai-ws"
                     }
                   }
                 }
