@@ -88,6 +88,7 @@ pip install --user google-cloud-aiplatform
 pip install --user kfp
 pip install --user google-cloud-pipeline-components
 pip install --user google-cloud-bigquery-datatransfer
+pip install --user --upgrade tfx
 ```
 
 ##### Create a Tensorboard instance
