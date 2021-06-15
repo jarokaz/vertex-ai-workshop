@@ -60,7 +60,7 @@ def create_pipeline(
     pipeline_root: Text,
     serving_model_uri: Text, 
     data_root_uri: Union[Text, data_types.RuntimeParameter],
-    schema_folder_uri: Union[Text, data_types.RuntimeParameter], 
+    schema_folder_uri: Text, 
     train_steps: int,
     eval_steps: int,
     beam_pipeline_args: List[Text],
@@ -125,14 +125,6 @@ def create_pipeline(
         custom_config=trainer_custom_config
     ).with_id("Trainer")
   
-    # Get the latest blessed model for model validation.
-    resolver = Resolver(
-        strategy_class=latest_blessed_model_resolver.LatestBlessedModelResolver,
-        model=tfx.types.Channel(type=tfx.types.standard_artifacts.Model),
-        model_blessing=tfx.types.Channel(
-            type=tfx.types.standard_artifacts.ModelBlessing
-        ),
-    ).with_id("BaselineModelResolver")
   
     # Uses TFMA to compute a evaluation statistics over features of a model.
     accuracy_threshold = tfma.MetricThreshold(
@@ -161,7 +153,6 @@ def create_pipeline(
     evaluator = Evaluator(
         examples=examplegen.outputs.examples,
         model=trainer.outputs.model,
-        baseline_model=resolver.outputs.model,
         eval_config=eval_config
     ).with_id("ModelEvaluator")
   
@@ -180,7 +171,6 @@ def create_pipeline(
         examplevalidator,
         transform,
         trainer, 
-        resolver, 
         evaluator, 
         pusher 
     ]
