@@ -84,11 +84,11 @@ These steps will be performed during the workshop, individually by each of the p
 #####  Install the required Python packages
 
 ```
+pip install --user tfx
 pip install --user google-cloud-aiplatform
 pip install --user kfp
 pip install --user google-cloud-pipeline-components
 pip install --user google-cloud-bigquery-datatransfer
-pip install --user --upgrade tfx
 ```
 
 ##### Create a Tensorboard instance
