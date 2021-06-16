@@ -17,7 +17,7 @@ locals {
 }
 
 data "google_compute_network" "vm_network" {
-    project = module.project-services.project_id
+    project = var.project_id
     name    = var.network_name
 
     depends_on = [
@@ -26,7 +26,7 @@ data "google_compute_network" "vm_network" {
 }
 
 data "google_compute_subnetwork" "vm_subnetwork" {
-    project = module.project-services.project_id
+    project = var.project_id
     name   = var.subnet_name
     region = var.subnet_region
 
@@ -36,7 +36,7 @@ data "google_compute_subnetwork" "vm_subnetwork" {
 }
 
 resource "google_notebooks_instance" "notebook_instance" {
-    project          = module.project-services.project_id
+    project          = var.project_id
     name             = "${var.name_prefix}-notebook"
     machine_type     = var.machine_type
     location         = var.zone
