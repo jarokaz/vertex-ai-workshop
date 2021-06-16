@@ -15,7 +15,7 @@
 
 
 resource "google_storage_bucket" "artifact_repo" {
-    project       = module.project-services.project_id
+    project       = var.project_id
     name          = "${var.name_prefix}-bucket"
     location      = local.region
     storage_class = local.bucket_type
