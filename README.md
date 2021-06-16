@@ -84,7 +84,6 @@ These steps will be performed during the workshop, individually by each of the p
 #####  Install the required Python packages
 
 ```
-pip install --user tfx==v0.30.0
 pip install --user google-cloud-aiplatform
 pip install --user kfp
 pip install --user google-cloud-pipeline-components
