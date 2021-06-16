@@ -32,12 +32,6 @@ from tfx.components import (
 )
     
 from tfx.dsl.components.common.importer import Importer
-from tfx.dsl.components.common.resolver import Resolver
-from tfx.dsl.experimental import latest_artifacts_resolver
-from tfx.dsl.experimental import latest_blessed_model_resolver 
-
-from tfx.dsl.components.base import executor_spec
-
 from tfx.orchestration import pipeline
 from tfx.orchestration import data_types
 from tfx.orchestration.metadata import sqlite_metadata_connection_config
@@ -45,10 +39,6 @@ from tfx.orchestration.metadata import sqlite_metadata_connection_config
 from tfx.proto import example_gen_pb2
 from tfx.proto import pusher_pb2
 
-#from tfx.types import Channel
-#from tfx.types.standard_artifacts import Model
-#from tfx.types.standard_artifacts import ModelBlessing
-#from tfx.types.standard_artifacts import Schema
 
 from typing import Optional, Dict, List, Text, Union, Any
 
@@ -59,15 +49,12 @@ def create_pipeline(
     pipeline_name: Text, 
     pipeline_root: Text,
     serving_model_uri: Text, 
-    data_root_uri: Union[Text, data_types.RuntimeParameter],
+    data_root_uri: Text,
     schema_folder_uri: Text, 
     train_steps: int,
     eval_steps: int,
-    beam_pipeline_args: List[Text],
-    trainer_custom_executor_spec: Optional[executor_spec.ExecutorSpec] = None,
-    trainer_custom_config: Optional[Dict[Text, Any]] = None,   
     enable_cache: Optional[bool] = False,
-    metadata_connection_config: Optional[metadata_store_pb2.ConnectionConfig] = None) -> pipeline.Pipeline:
+) -> pipeline.Pipeline:
 
     """Trains and deploys the Keras Covertype Classifier with TFX and AI Platform Pipelines."""
   
@@ -115,14 +102,12 @@ def create_pipeline(
   
     # Trains the model using a user provided trainer function.
     trainer = Trainer(
-        custom_executor_spec=trainer_custom_executor_spec,
         module_file=TRAIN_MODULE_FILE,
         transformed_examples=transform.outputs.transformed_examples,
         schema=import_schema.outputs.result,
         transform_graph=transform.outputs.transform_graph,     
         train_args={'num_steps': train_steps},
         eval_args={'num_steps': eval_steps},
-        custom_config=trainer_custom_config
     ).with_id("Trainer")
   
   
@@ -140,14 +125,14 @@ def create_pipeline(
                          tfma.MetricConfig(class_name='ExampleCount')])
   
     eval_config = tfma.EvalConfig(
-      model_specs=[
-          tfma.ModelSpec(label_key='Cover_Type')
-      ],
-      metrics_specs=[metrics_specs],
-      slicing_specs=[
-          tfma.SlicingSpec(),
-          tfma.SlicingSpec(feature_keys=['Wilderness_Area'])
-      ]
+        model_specs=[
+            tfma.ModelSpec(label_key='Cover_Type')
+        ],
+        metrics_specs=[metrics_specs],
+        slicing_specs=[
+            tfma.SlicingSpec(),
+            tfma.SlicingSpec(feature_keys=['Wilderness_Area'])
+        ]
     )
     
     evaluator = Evaluator(
@@ -175,14 +160,11 @@ def create_pipeline(
         pusher 
     ]
   
-  
     return pipeline.Pipeline(
         pipeline_name=pipeline_name,
         pipeline_root=pipeline_root,
         components=components,
-        enable_cache=enable_cache,
-        beam_pipeline_args=beam_pipeline_args,
-        metadata_connection_config=metadata_connection_config
+        enable_cache=enable_cache
     )
   
   
