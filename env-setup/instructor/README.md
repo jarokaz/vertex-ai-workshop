@@ -36,7 +36,7 @@ To provision the environment:
 ```
 SRC_REPO=https://github.com/jarokaz/vertex-ai-workshop
 LOCAL_DIR=vertex-ai-env-setup
-kpt pkg get $SRC_REPO/env-setup@main $LOCAL_DIR
+kpt pkg get $SRC_REPO/env-setup/instructor@main $LOCAL_DIR
 cd $LOCAL_DIR/terraform
 ```
 
