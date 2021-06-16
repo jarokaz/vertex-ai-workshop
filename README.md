@@ -51,7 +51,7 @@ This account will be used by Vertex Training service. The account needs the foll
 
 This account will be used by Vertex Pipelines service. The account needs the following permissions:
 
-- storage.objectAdmin
+- storage.admin
 - aiplatform.user
 - bigquery.admin
 
