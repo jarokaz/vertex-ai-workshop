@@ -105,7 +105,7 @@ variable "training_sa_roles" {
 variable "pipelines_sa_roles" {
   description = "The roles to assign to the Vertex Pipelines service account"
   default = [    
-    "storage.objectAdmin", 
+    "storage.admin", 
     "bigquery.admin", 
     "aiplatform.user"
   ]
