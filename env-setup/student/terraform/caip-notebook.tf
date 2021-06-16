@@ -19,20 +19,12 @@ locals {
 data "google_compute_network" "vm_network" {
     project = var.project_id
     name    = var.network_name
-
-    depends_on = [
-        module.project-services
-    ]
 }
 
 data "google_compute_subnetwork" "vm_subnetwork" {
     project = var.project_id
     name   = var.subnet_name
     region = var.subnet_region
-
-    depends_on = [
-        module.project-services
-    ]
 }
 
 resource "google_notebooks_instance" "notebook_instance" {
