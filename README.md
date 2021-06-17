@@ -47,6 +47,10 @@ This account will be used by Vertex Training service. The account needs the foll
 - aiplatform.user
 - bigquery.admin
 
+The account email should be 
+
+`training-sa@{PROJECT_ID}.iam.gserviceaccount.com`
+
 #### Vertex AI pipelines service account
 
 This account will be used by Vertex Pipelines service. The account needs the following permissions:
@@ -54,6 +58,10 @@ This account will be used by Vertex Pipelines service. The account needs the fol
 - storage.admin
 - aiplatform.user
 - bigquery.admin
+
+The account email should be 
+
+`pipelines-sa@{PROJECT_ID}.iam.gserviceaccount.com`
 
 ### GCS buckets
 
