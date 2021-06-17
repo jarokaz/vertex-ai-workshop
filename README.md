@@ -79,7 +79,9 @@ The instance should be configured as follows:
 
 #### Vertex AI Notebook setup
 
-These steps will be performed during the workshop, individually by each of the participants.
+The following setup steps will be performed during the workshop, individually by each of the participants.
+
+In JupyterLab, open a terminal and:
 
 #####  Install the required Python packages
 
@@ -92,7 +94,7 @@ pip install --user google-cloud-bigquery-datatransfer
 
 ##### Create a Tensorboard instance
 
-Each participant will use their own Vertex Tensorboard instance. Note 
+Each participant will use their own Vertex Tensorboard instance.
 
 ```
 PROJECT=jk-vertex-workshop
@@ -114,4 +116,8 @@ gcloud beta ai tensorboards list \
   --project $PROJECT --region $REGION
 ```
 
+##### Clone this repo
+```
+git clone https://github.com/jarokaz/vertex-ai-workshop
+```
 
