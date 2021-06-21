@@ -78,14 +78,14 @@ To create a GCS bucket:
 1. Open GCP [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell)
 2. Set the project
 ```
-PROJECT=[YOUR PROJECT ID]
+export PROJECT=[YOUR PROJECT ID]
 gcloud config set project $PROJECT
 ```
 3. Create a GCS bucket
 ```
-PREFIX=myprefix
-REGION=us-central1
-BUCKET_NAME=gs://${PREFIX}-bucket
+export PREFIX=myprefix
+export REGION=us-central1
+export BUCKET_NAME=gs://${PREFIX}-bucket
 
 gsutil mb -l $REGION $BUCKET_NAME
 ```
@@ -101,6 +101,21 @@ The instance should be configured as follows:
 - Optionally a T4 GPU can be added to the machine configuration if participants want to experiment with GPUs
 - Image family: **tf-2-4-cpu** or **tf-2-4-cu110** (if using GPUs)
 - Configured with the default compute engine service account
+
+To create a Vertex AI Notebook instance
+
+```
+export INSTANCE_NAME=${PREFIX}-notebook
+export VM_IMAGE_PROJECT="deeplearning-platform-release"
+export VM_IMAGE_FAMILY="tf-2-4-cpu"
+export MACHINE_TYPE="n1-standard-4"
+export LOCATION="us-central1-a"
+
+gcloud notebooks instances create $INSTANCE_NAME \
+  --vm-image-project=$VM_IMAGE_PROJECT \
+  --vm-image-family=$VM_IMAGE_FAMILY \
+  --machine-type=$MACHINE_TYPE --location=$LOCATION
+```
 
 #### Vertex AI Notebook setup
 
