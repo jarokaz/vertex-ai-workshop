@@ -83,8 +83,8 @@ gcloud config set project $PROJECT
 ```
 3. Create a GCS bucket
 ```
-REGION=us-central1
 PREFIX=myprefix
+REGION=us-central1
 BUCKET_NAME=gs://${PREFIX}-bucket
 
 gsutil mb -l $REGION $BUCKET_NAME
