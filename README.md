@@ -93,7 +93,7 @@ gsutil mb -l $REGION $BUCKET_NAME
 
 ### Vertex AI Notebook
 
-Each participant should have any instance of Vertex AI Notebook. The instances can be pre-created or can be created during the workshop.
+Each participant should have an instance of Vertex AI Notebooks. The instances can be pre-created or can be created during the workshop.
 
 The instance should be configured as follows:
 
@@ -101,6 +101,8 @@ The instance should be configured as follows:
 - Optionally a T4 GPU can be added to the machine configuration if participants want to experiment with GPUs
 - Image family: **tf-2-4-cpu** or **tf-2-4-cu110** (if using GPUs)
 - Configured with the default compute engine service account
+
+#### Creating a notebook instance
 
 To create a Vertex AI Notebook instance
 
@@ -117,13 +119,9 @@ gcloud notebooks instances create $INSTANCE_NAME \
   --machine-type=$MACHINE_TYPE --location=$LOCATION
 ```
 
-#### Vertex AI Notebook setup
+#### Installing the required Python packages
 
-The following setup steps will be performed during the workshop, individually by each of the participants.
-
-In JupyterLab, open a terminal and:
-
-#####  Install the required Python packages
+In JupyterLab, open a terminal and install the following packages:
 
 ```
 pip install --user google-cloud-aiplatform
@@ -132,9 +130,9 @@ pip install --user google-cloud-pipeline-components
 pip install --user google-cloud-bigquery-datatransfer
 ```
 
-##### Create a Tensorboard instance
+##### Creating a Tensorboard instance
 
-Each participant will use their own Vertex Tensorboard instance.
+Each participant will use their own Vertex Tensorboard instance. From the JupyterLab terminal:
 
 ```
 PROJECT=jk-vertex-workshop
@@ -156,7 +154,7 @@ gcloud beta ai tensorboards list \
   --project $PROJECT --region $REGION
 ```
 
-##### Clone this repo
+##### Cloning the repo with hands-on labs
 ```
 git clone https://github.com/jarokaz/vertex-ai-workshop
 ```
