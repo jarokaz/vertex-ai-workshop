@@ -73,6 +73,23 @@ The goal of the prefix is too avoid conflicts between participants as such it sh
 
 The workshop notebooks assume this naming convention.
 
+To create a GCS bucket:
+
+1. Open GCP [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell)
+2. Set the project
+```
+PROJECT=[YOUR PROJECT ID]
+gcloud config set project $PROJECT
+```
+3. Create a GCS bucket
+```
+REGION=us-central1
+PREFIX=myprefix
+BUCKET_NAME=gs://${PREFIX}-bucket
+
+gsutil mb -l $REGION $BUCKET_NAME
+```
+
 
 ### Vertex AI Notebook
 
