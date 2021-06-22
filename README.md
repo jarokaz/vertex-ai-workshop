@@ -43,9 +43,10 @@ Two service accounts must be created in the project.
 
 This account will be used by Vertex Training service. The account needs the following permissions:
 
-- storage.admin
-- aiplatform.user
-- bigquery.admin
+- Storage Admin
+- Storage Object Admin
+- Vertex User
+- BigQuery Admin
 
 The account email should be 
 
@@ -55,9 +56,10 @@ The account email should be
 
 This account will be used by Vertex Pipelines service. The account needs the following permissions:
 
-- storage.admin
-- aiplatform.user
-- bigquery.admin
+- Storage Admin
+- Storage Object Admin
+- Vertex User
+- BigQuery Admin
 
 The account email should be 
 
