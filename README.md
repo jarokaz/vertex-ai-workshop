@@ -137,9 +137,9 @@ pip install --user google-cloud-bigquery-datatransfer
 Each participant will use their own Vertex Tensorboard instance. From the JupyterLab terminal:
 
 ```
-export PROJECT=[YOUR PROJECT ID]
+export PROJECT=phc-rdi-vertexai-sb-c50d9101
 export PREFIX=[YOUR PREFIX]
-export REGION=us-central1
+export REGION=us-west1
 export DISPLAY_NAME=${PREFIX}-tensorboard
 
 gcloud beta ai tensorboards create --display-name $DISPLAY_NAME \
