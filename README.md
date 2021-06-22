@@ -128,7 +128,7 @@ In JupyterLab, open a terminal and install the following packages:
 ```
 pip install --user google-cloud-aiplatform
 pip install --user kfp
-pip install --user google-cloud-pipeline-components
+pip install --user google-cloud-pipeline-components==0.1.1
 pip install --user google-cloud-bigquery-datatransfer
 ```
 
