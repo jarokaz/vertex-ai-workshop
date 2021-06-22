@@ -5,121 +5,10 @@ Hands-on labs introducing core GCP Vertex AI features.
 
 ## Environment Setup
 
-The following section describes requirements for setting up a GCP environment required for the workshop. Note that we have provided example [Terraform](https://www.terraform.io/) scripts to automate the process. You can find the scripts and the instructions in the `env-setup` folder.
-
-### GCP Project
-
-Ideally each participant should have their own sandbox GCP project. If this is not feasible, multiple participants can share a single project but other resources used during the labs like GCS buckets should be created for each participant. See below for details. You need to be a project owner to complete some of the setup steps.
-
-### Cloud APIs
-
-The following APIs need to be enabled in the project:
-
-- compute.googleapis.com
-- iam.googleapis.com
-- container.googleapis.com
-- artifactregistry.googleapis.com
-- cloudresourcemanager.googleapis.com
-- cloudtrace.googleapis.com
-- iamcredentials.googleapis.com
-- monitoring.googleapis.com
-- logging.googleapis.com
-- notebooks.googleapis.com
-- aiplatform.googleapis.com
-- dataflow.googleapis.com
-- bigquery.googleapis.com
-- cloudbuild.googleapis.com
-- bigquerydatatransfer.googleapis.com
-
-### GCP Region
-
-Note that some services used during the notebook are only available in a limited number of regions. We recommend using `us-central1`.
-
-### Service accounts
-
-Two service accounts must be created in the project.
-
-#### Vertex AI training service account
-
-This account will be used by Vertex Training service. The account needs the following permissions:
-
-- Storage Admin
-- Storage Object Admin
-- Vertex User
-- BigQuery Admin
-
-The account email should be 
-
-`training-sa@{PROJECT_ID}.iam.gserviceaccount.com`
-
-#### Vertex AI pipelines service account
-
-This account will be used by Vertex Pipelines service. The account needs the following permissions:
-
-- Storage Admin
-- Storage Object Admin
-- Vertex User
-- BigQuery Admin
-
-The account email should be 
-
-`pipelines-sa@{PROJECT_ID}.iam.gserviceaccount.com`
-
-### GCS buckets
-
-Each participant should have their own regional GCS bucket. The bucket should be created in the GCP region that will be used during the workshop. The bucket name should use the following naming convention
-
-`gs://{PREFIX}-bucket`
-
-The goal of the prefix is too avoid conflicts between participants as such it should be unique for each participant. **The prefix should start with a letter and include letters and digits only**
-
-The workshop notebooks assume this naming convention.
-
-To create a GCS bucket:
-
-1. Open GCP [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell)
-2. Set the project
-```
-export PROJECT=[YOUR PROJECT ID]
-gcloud config set project $PROJECT
-```
-3. Create a GCS bucket
-```
-export PREFIX=myprefix
-export REGION=us-central1
-export BUCKET_NAME=gs://${PREFIX}-bucket
-
-gsutil mb -l $REGION $BUCKET_NAME
-```
 
 
 ### Vertex AI Notebook
 
-Each participant should have an instance of Vertex AI Notebooks. The instances can be pre-created or can be created during the workshop.
-
-The instance should be configured as follows:
-
-- Machine type: **n1-standard-4**
-- Optionally a T4 GPU can be added to the machine configuration if participants want to experiment with GPUs
-- Image family: **tf-2-4-cpu** or **tf-2-4-cu110** (if using GPUs)
-- Configured with the default compute engine service account
-
-#### Creating a notebook instance
-
-To create a Vertex AI Notebook instance
-
-```
-export INSTANCE_NAME=${PREFIX}-notebook
-export VM_IMAGE_PROJECT="deeplearning-platform-release"
-export VM_IMAGE_FAMILY="tf-2-4-cpu"
-export MACHINE_TYPE="n1-standard-4"
-export LOCATION="us-central1-a"
-
-gcloud notebooks instances create $INSTANCE_NAME \
-  --vm-image-project=$VM_IMAGE_PROJECT \
-  --vm-image-family=$VM_IMAGE_FAMILY \
-  --machine-type=$MACHINE_TYPE --location=$LOCATION
-```
 
 #### Installing the required Python packages
 
@@ -137,9 +26,9 @@ pip install --user google-cloud-bigquery-datatransfer
 Each participant will use their own Vertex Tensorboard instance. From the JupyterLab terminal:
 
 ```
-export PROJECT=phc-rdi-vertexai-sb-c50d9101
 export PREFIX=[YOUR PREFIX]
-export REGION=us-west1
+export PROJECT=phc-rdi-vertexai-sb-c50d9101
+export REGION=us-central1
 export DISPLAY_NAME=${PREFIX}-tensorboard
 
 gcloud beta ai tensorboards create --display-name $DISPLAY_NAME \
