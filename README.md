@@ -9,7 +9,7 @@ Hands-on labs introducing core GCP Vertex AI features.
 
 ### Creating a Vertex AI Notebooks instance
 
-Follow the instructor
+Create an instance of Vertex Notebooks using TensorFlow Enterprise 2.5 image without a GPU.
 
 
 #### Installing the required Python packages
