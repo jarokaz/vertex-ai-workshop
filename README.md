@@ -3,8 +3,7 @@
 Hands-on labs introducing core GCP Vertex AI features.
 
 
-## Environment Setup
-
+## Lab Environment Setup
 
 
 ### Creating a Vertex AI Notebooks instance
@@ -14,7 +13,7 @@ Create an instance of Vertex Notebooks using TensorFlow Enterprise 2.5 image wit
 
 #### Installing the required Python packages
 
-In JupyterLab, open a terminal and install the following packages:
+Log on to JupyterLab in your instance. In JupyterLab, open a terminal and install the following packages:
 
 ```
 pip install --user kfp==1.6.4
