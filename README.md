@@ -21,7 +21,7 @@ pip install --user kfp==1.6.4
 pip install --user tfx==1.0.0-rc1
 pip install --user google-cloud-bigquery-datatransfer==3.2.0
 pip install --user google-cloud-pipeline-components==0.1.1
-pip install --user google-cloud-aiplatform=1.1.1
+pip install --user google-cloud-aiplatform==1.1.1
 
 ```
 
