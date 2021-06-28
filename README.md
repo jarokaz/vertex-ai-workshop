@@ -17,7 +17,6 @@ Follow the instructor
 In JupyterLab, open a terminal and install the following packages:
 
 ```
-
 pip install --user kfp==1.6.4
 pip install --user tfx==1.0.0-rc1
 pip install --user google-cloud-bigquery-datatransfer==3.2.0
